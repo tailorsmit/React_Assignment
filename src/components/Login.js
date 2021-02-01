@@ -12,6 +12,9 @@ class Login extends React.Component {
         if(this.token !== ''){
             this.props.history.push('/')
         }
+        this.state = {
+            success: ''
+        }
     }
 
     onSubmit = async (event) => {
@@ -26,20 +29,25 @@ class Login extends React.Component {
         })
         console.log(res.status)
         const d= await res.json()
-        console.log(d)
+        //console.log(d)
         if(res.status === 200 && (d.token !== '' || d.token !== null) ){
             localStorage.setItem('authtoken','Token '+d.token)
             this.props.history.push('/');
+        }else if(res.status === 400){
+            this.setState({
+                success : <h3>invalid credentials</h3>
+            })
         }
     }
 
     render() {
         return <div>
             <form name='loginform' onSubmit={this.onSubmit}>
-                email : <input type='email' name='email'/><br/>
-                password : <input type='password' name='password'/><hr/>
+                email : <input type='email' name='email' required/><br/>
+                password : <input type='password' name='password' required/><hr/>
                 <input type='submit' value='Login'/>
             </form>
+            {this.state.success}
             Not yet registered? <Link to="/register">Register Now!</Link>
         </div>
     }

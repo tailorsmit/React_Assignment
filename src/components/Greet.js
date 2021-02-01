@@ -18,25 +18,26 @@ class Greet extends React.Component {
         //console.log(this.token)
         if(this.token === ''){
             this.props.history.push('/login')
+        }else {
+            fetch('http://localhost:8000/api/user/me/', {
+                method: 'GET',
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'Authorization': this.token
+                })
+            }).then(res =>
+                res.json()
+            ).then(data => {
+                this.username = data.username;
+                this.state = {
+                    username: data.username,
+                    verified: data.verified,
+                    mobile_no: data.mobile_no,
+                    email: data.email
+                }
+                console.log(this.state.username);
+            })
         }
-        fetch('http://localhost:8000/api/user/me/', {
-            method: 'GET',
-            headers: new Headers({
-                'Accept': 'application/json',
-                'Authorization': this.token
-            })
-        }).then(res =>
-            res.json()
-        ).then(data => {
-            this.username = data.username;
-            this.setState({
-                username: data.username,
-                verified: data.verified,
-                mobile_no: data.mobile_no,
-                email: data.email
-            })
-            console.log(this.state.username);
-        })
     }
 
     logout = ()=> {
@@ -73,7 +74,6 @@ class Greet extends React.Component {
             <img src={this.loadImagePath()}  alt='not found' height='20px' width='20px'/>
             </h1></pre>
             {this.verifyButton()}
-            <br/>
             <h3>mobile no   : {this.state.mobile_no}</h3>
             <h3>email       : {this.state.email}</h3>
             <button name='logout' onClick={this.logout} value='logout'>Logout</button>

@@ -10,13 +10,14 @@ class Greet extends React.Component {
         username: "",
         mobile_no: "",
         verified: null,
+        email: ""
     }
 
     constructor(props) {
         super(props);
         this.token = localStorage.getItem('authtoken');
-        //console.log(this.token)
-        if(this.token === ''){
+        console.log(this.token)
+        if(this.token === '' || this.token === null){
             this.props.history.push('/login')
         }else {
             fetch('http://localhost:8000/api/user/me/', {
@@ -29,12 +30,12 @@ class Greet extends React.Component {
                 res.json()
             ).then(data => {
                 this.username = data.username;
-                this.state = {
+                this.setState({
                     username: data.username,
                     verified: data.verified,
                     mobile_no: data.mobile_no,
                     email: data.email
-                }
+                })
                 console.log(this.state.username);
             })
         }

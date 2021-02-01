@@ -9,7 +9,7 @@ class Login extends React.Component {
         this.onSubmit = this.onSubmit.bind(this)
         this.token = localStorage.getItem('authtoken')
         console.log(this.token)
-        if(this.token !== ''){
+        if(this.token !== '' && this.token!== null){
             this.props.history.push('/')
         }
         this.state = {
